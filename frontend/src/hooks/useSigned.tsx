@@ -27,7 +27,7 @@ export default function useSigned(){
             setIsSigned(false);
             setIsLoading(false);
          }  
-     }).catch(function(err){
+     }).catch(function(){
       setIsSigned(false);
       setIsLoading(false);
      })

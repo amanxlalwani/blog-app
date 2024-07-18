@@ -22,7 +22,7 @@ export default function Blog(){
     console.log(res.data);
     setLoading(false)
     setBlog(res.data.blog)
-    }).catch(function(err){
+    }).catch(function(){
        navigate("/signup")
     })
     
@@ -33,7 +33,7 @@ export default function Blog(){
         }
     }).then(function(res){
      setBlog(res.data.blog)
-    }).catch(function(err){
+    }).catch(function(){
       navigate("/signup")
       
     })

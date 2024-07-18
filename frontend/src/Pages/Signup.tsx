@@ -33,9 +33,10 @@ export default function Signup(){
 
 
     async function apiCall(user:signupType){
+      setLoading(true);
         try{
         const res=await axios.post("https://backend.aman-lalwani208.workers.dev/api/v1/user/signup",user);
-        setLoading(true);
+  
         const token=res.data.token;
         localStorage.setItem("token",token);
         setLoading(false);
@@ -44,6 +45,7 @@ export default function Signup(){
         }
          catch(err:any){
           console.log(err);
+          setLoading(false);
           const message=err.response.data['message']; 
           toast.error(message)
          }

@@ -12,9 +12,10 @@ export default function CreateBlog(){
 
     const [blog,setBlog]=useState<blogType>({title:"",content:""})
     const {isSigned,isLoading}=useSigned();
+    const [loading,setLoading]=useState(false);
     const navigate=useNavigate();
    
-    if(isLoading){
+    if(isLoading || loading){
         return <>
         <Loading></Loading>
         </>
@@ -34,18 +35,19 @@ return <>
     toast.error("Fields cannot empty")
     return
    }
-
+    setLoading(true);
     try{
     const res=await axios.post("https://backend.aman-lalwani208.workers.dev/api/v1/blog",blog,{
         headers:{
             Authorization:localStorage.getItem('token')
         }
     })
-    if(res.status==200){
+    setLoading(false);
         toast.success(res.data.message);
         navigate("/blogs")
-    }}
+    }
     catch(err:any){
+        setLoading(false)
         console.log(err);
         const message=err.response.data['message']; 
         toast.error(message)

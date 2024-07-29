@@ -1,7 +1,7 @@
 
 import like_button from '../assets/like_button.png'
 import liked from '../assets/liked.png'
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 
 

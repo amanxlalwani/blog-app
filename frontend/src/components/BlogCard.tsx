@@ -2,12 +2,11 @@
 import { useNavigate } from "react-router-dom";
 
 
-
 function dateExtract(publish_date:string){
     return publish_date.slice(0,10);
 }
 
-export default function BlogCard(blog:{id:string,title:string,content:string,publish_date:string,author:{name:string}}){
+export default function BlogCard(blog:{id:string,title:string,content:string,publish_date:string,author:{name:string},likes:number}){
 
 const navigate=useNavigate()
 
@@ -20,8 +19,9 @@ const navigate=useNavigate()
             <div className=" max-w-full textMaxLine  ">
                {blog.content}
             </div>
+            <div className="mt-4 font-semibold">{blog.likes} People liked this blog</div>
             </div>
-     
         </div>
+    
     </>
 }

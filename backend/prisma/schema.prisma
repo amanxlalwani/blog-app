@@ -21,6 +21,8 @@ model User {
   name     String   @default("Unknown")
   password String
   posts    Post[]
+  likes    Like[]
+  comments Comment[]
 }
 
 model Post {
@@ -31,4 +33,30 @@ model Post {
   author    User     @relation(fields: [authorId], references: [id])
   publish_date DateTime @default(now())
   authorId  String
+  likes     Like[] 
+  comments  Comment[]
 }
+
+
+model Like {
+  id          String @id @default(uuid())
+  post        Post @relation(fields: [postId],references: [id]) 
+  postId      String
+  user       User @relation(fields: [userId],references: [id])
+  userId      String 
+  has_liked   Boolean
+ }
+
+
+ model Comment{
+  id          String @id @default(uuid())
+  comment     String
+  post        Post @relation(fields: [postId],references: [id])
+  postId      String
+  user        User @relation(fields: [userId] , references: [id])
+  userId      String
+  replies     Comment[] @relation(name: "CommentToComment")
+  parentId    String?
+  parentComment Comment?  @relation(name:"CommentToComment", fields: [parentId],references: [id])
+  isChildComment Boolean       
+ }

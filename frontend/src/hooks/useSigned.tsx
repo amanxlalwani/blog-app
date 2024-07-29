@@ -7,7 +7,7 @@ export default function useSigned(){
     const[isSigned , setIsSigned]=useState(false);
     const [email,setEmail]=useState("");  
     const [isLoading ,setIsLoading]=useState(true);
-    
+    const [userId,setUserId]=useState("")
     useEffect(()=>{
       const token = localStorage.getItem('token');
       if(token){
@@ -22,6 +22,7 @@ export default function useSigned(){
             setIsSigned(true);
             setIsLoading(false);
             setEmail(res.data.user.email)
+            setUserId(res.data.user.id)
          }
          else{
             setIsSigned(false);
@@ -40,7 +41,7 @@ export default function useSigned(){
   
     },[])
   
-  return {isSigned,isLoading,email}
+  return {isSigned,isLoading,email,userId}
   
   }
   

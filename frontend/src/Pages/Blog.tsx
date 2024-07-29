@@ -4,14 +4,44 @@ import { useNavigate, useParams } from "react-router-dom";
 import useSigned from "../hooks/useSigned";
 import BlogPageSkeleton from "../components/BlogPageSkeleton";
 import Nav from "../components/Nav";
+import LikesSection from "../components/LikesSection";
+import CommentSection from "../components/CommentSection";
 
 
 export default function Blog(){
    const {id}=useParams();
    const [loading,setLoading]=useState(true);
-   const [blog,setBlog]=useState({id:"",title:"",content:"",publish_date:"",author:{name:""}})
+   const [blog,setBlog]=useState({id:"",title:"",content:"",publish_date:"",author:{name:""},likes:[{
+    userId:"",
+    has_liked:false
+   }]})
    const navigate=useNavigate() 
-   const {isSigned,isLoading,email}=useSigned();
+   const {isSigned,isLoading,email,userId}=useSigned();
+
+       
+   function nooflikes(likes:{userId:string,has_liked:boolean}[]):number{
+    var c=0
+    likes.forEach(element => {
+    if(element.has_liked){
+     c++;
+    }
+  });
+  return c
+  }
+     
+   function hasLiked(likes:{userId:string,has_liked:boolean}[]):boolean{
+    console.log(likes);
+    var val=false;
+    likes.forEach(element => {
+      if(element.userId == userId){
+         if(element.has_liked)
+         {
+          val=true;
+         }
+      }
+    });
+    return val
+   }
 
    useEffect(()=>{
     axios.get("https://backend.aman-lalwani208.workers.dev/api/v1/blog/"+id,{
@@ -38,7 +68,7 @@ export default function Blog(){
       
     })
 
-    },10000)
+    },1000000)
 
    },[id])
    
@@ -67,10 +97,16 @@ export default function Blog(){
  <div className="mt-10 lg:mt-0">
   <div>Author</div>
   <div className="text-xl font-extrabold  ">{blog.author.name}</div>
+  <div className="mt-10">
+    <LikesSection id={blog.id} isLiked={hasLiked(blog.likes)} likes={nooflikes(blog.likes)} ></LikesSection>
  </div>
-    
-   </div>
-
+ </div>  
+</div>
+ <div className="w-11/12 m-auto px-6 lg:mt-14 lg:grid lg:gap-4 lg:grid-cols-4">
+ <div className="lg:col-span-3">
+    <CommentSection blogId={blog.id}></CommentSection>
+ </div>
+ </div>
 
     </>
 }

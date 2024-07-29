@@ -10,6 +10,9 @@ import Blogs from './Pages/Blogs';
 
 import useSigned from './hooks/useSigned';
 import CreateBlog from './Pages/CreateBlog';
+import MyBlogs from './Pages/MyBlogs';
+import UpdateBlog from './Pages/UpdateBlog';
+
 
 
  function App() {
@@ -23,8 +26,11 @@ import CreateBlog from './Pages/CreateBlog';
       <Route path='/signin' element={<Suspense fallback={<Loading></Loading>}><Signin></Signin></Suspense>} ></Route>
       <Route path='/signup' element={<Suspense fallback={<Loading></Loading>}><Signup></Signup></Suspense>} ></Route>
       <Route path='/blog/:id' element={<Suspense fallback={<Loading></Loading>}><Blog></Blog></Suspense>} ></Route>
+      <Route path='/updateblog/:id' element={<Suspense fallback={<Loading></Loading>}><UpdateBlog></UpdateBlog></Suspense>} ></Route>
       <Route path='/blogs' element={<Suspense fallback={<Loading></Loading>}><Blogs></Blogs> </Suspense>}></Route>
+      <Route path='/myblogs' element={<Suspense fallback={<Loading></Loading>}> <MyBlogs></MyBlogs> </Suspense>}></Route>
       <Route path='/createblog' element={<Suspense fallback={<Loading></Loading>}><CreateBlog></CreateBlog> </Suspense>}></Route>
+
     </Routes> 
     </BrowserRouter>
     </div>

@@ -21,7 +21,7 @@ return<>
 <div className="z-10 flex flex-col  items-center justify-center  absolute left-1/2 translate-x-[-50%] md:translate-y-[15%] lg:translate-y-[25%] sm:translate-y-[10%] translate-y-[5%]      rounded-lg bg-slate-200 w-3/4 h-fit p-8 lg:w-2/5">
 <div onClick={()=>setModal(false)} className="self-end pt-2 pr-4 mb-4 cursor-pointer"><img width="30" height="30" src="https://img.icons8.com/ios-glyphs/30/multiply.png" alt="multiply"/></div>
 <div className="w-2/3">
-<InputBox required={true} name="Email" placeholder="" type='email'  value={profilesection.email} onChange={(e)=>{}}   ></InputBox>
+<InputBox required={true} name="Email" placeholder="" type='email'  value={profilesection.email} onChange={()=>{}}   ></InputBox>
 <InputBox required={true} name="Name" placeholder="" type='text' value={profilesection.name} onChange={(e)=>{setProfileSection({...profilesection,name:e.target.value})}}   ></InputBox>
 <TextArea name={"Bio"} placeholder="" value={profilesection.bio|| ""} onChange={(e)=>{setProfileSection({...profilesection,bio:e.target.value})}} ></TextArea>
  <Button title="Update Details" onClick={async ()=>{

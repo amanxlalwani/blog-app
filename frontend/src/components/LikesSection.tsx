@@ -18,7 +18,7 @@ const [likes, setLikes]=useState(blog.likes)
             
             async ()=>{
                 setHasLiked(hasliked=>!hasliked)
-                const res=await axios.post("https://backend.aman-lalwani208.workers.dev/api/v1/blog/like/"+blog.id,{},{
+                await axios.post("https://backend.aman-lalwani208.workers.dev/api/v1/blog/like/"+blog.id,{},{
                 headers:{
                     Authorization:localStorage.getItem('token')
                 }

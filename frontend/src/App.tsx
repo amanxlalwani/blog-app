@@ -12,8 +12,6 @@ import useSigned from './hooks/useSigned';
 import CreateBlog from './Pages/CreateBlog';
 import MyBlogs from './Pages/MyBlogs';
 import UpdateBlog from './Pages/UpdateBlog';
-import { useProfile } from './hooks/useProfile';
-
 
 
  function App() {

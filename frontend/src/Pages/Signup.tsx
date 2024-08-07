@@ -26,8 +26,6 @@ export default function Signup(){
     if(isSigned){
       navigate('/blogs');
     }
-    console.log(loading);
-    
 
 
 

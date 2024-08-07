@@ -23,7 +23,6 @@ const [likes, setLikes]=useState(blog.likes)
                     Authorization:localStorage.getItem('token')
                 }
                 })
-                console.log(res.data);
             }
         }>
             {hasliked? <img src={liked} className="w-8" onClick={()=>{

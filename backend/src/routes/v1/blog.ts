@@ -46,7 +46,7 @@ app.get('/',(c)=>{
 app.post('/',async (c)=>{
     const id = c.get("userid");
     const data=await c.req.json();
-    console.log(id);
+
     const {success,error}=blogSchema.safeParse(data);
     data['authorId']=id;
 
@@ -57,7 +57,7 @@ app.post('/',async (c)=>{
     }
     const prisma= getPrisma(c.env.DATABASE_URL);
     const result= await prisma.post.create({data})
-    console.log(result);
+
     return c.json({message:"Post Created Successfully"})
     
 })
@@ -67,7 +67,7 @@ app.put('/:id',async (c)=>{
     const userId=c.get("userid");
     const data=await c.req.json();
     const prisma= getPrisma(c.env.DATABASE_URL);
-    console.log(blogId);
+
     const result= await prisma.post.update({where:{
      id:blogId,
      authorId:userId
@@ -254,12 +254,15 @@ app.get('/myblogs',async (c) =>{
     })   
    })
    
+
    
+   
+
 
 app.get('/:id', async (c)=>{
  const prisma=getPrisma(c.env.DATABASE_URL);
  const blogId=c.req.param("id");
- const blog=await prisma.post.findFirst({where:{id:blogId},select:{id:true,title:true,content:true,publish_date:true,author:{select:{name:true}},
+ const blog=await prisma.post.findFirst({where:{id:blogId},select:{id:true,title:true,content:true,publish_date:true,author:{select:{name:true,bio:true}},
     likes:{
         select:{
             userId:true,

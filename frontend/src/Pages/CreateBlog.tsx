@@ -27,7 +27,7 @@ export default function CreateBlog(){
 
 
 return <>
-<div className="flex justify-between px-4  mt-20 lg:mt-4">
+<div className="flex justify-between px-4  mt-20 lg:mt-4 pb-8">
   <Link to="/blogs"><div className="text-3xl font-bold">Sadhan</div></Link>  
   <div className=" w-20 bg-green-600 flex justify-center items-center rounded cursor-pointer" onClick={async ()=>{
    

@@ -5,10 +5,14 @@ import useSigned from "../hooks/useSigned";
 import BlogPageSkeleton from "../components/BlogPageSkeleton";
 import Nav from "../components/Nav";
 import { toast } from "react-toastify";
+import { useProfile } from "../hooks/useProfile";
 
 
 export default function UpdateBlog(){
    const {id}=useParams();
+   const {modal,setModal}=useProfile();
+   
+
    const [loading,setLoading]=useState(true);
    const [blog,setBlog]=useState({title:"",content:""})
    const navigate=useNavigate() 
@@ -20,9 +24,9 @@ export default function UpdateBlog(){
             Authorization:localStorage.getItem('token')
         }
     }).then(function(res){
-    console.log(res.data);
+
     setLoading(false)
-    console.log(res.data);
+
     
     setBlog({title:res.data.blog.title,content:res.data.blog.content})
     
@@ -36,8 +40,11 @@ export default function UpdateBlog(){
    
    if(isLoading || loading){
     return <>
-    <Nav email={email}></Nav>
+     
+    <Nav email={email} modal={modal} setModal={setModal}></Nav>
+    <div className={modal?"blur-sm  select-none":""}>
     <BlogPageSkeleton></BlogPageSkeleton>
+    </div>
     </>
    }
   
@@ -48,7 +55,7 @@ export default function UpdateBlog(){
 
 
 return <>
-<div className="flex justify-between px-4  mt-20 lg:mt-4">
+<div className="flex justify-between px-4  mt-20 pb-8 lg:mt-4">
   <Link to="/blogs"><div className="text-3xl font-bold">Sadhan</div></Link>  
   <div className=" w-20 bg-green-600 flex justify-center items-center rounded cursor-pointer" onClick={async ()=>{
    

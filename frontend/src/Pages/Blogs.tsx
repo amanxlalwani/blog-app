@@ -7,10 +7,12 @@ import Nav from "../components/Nav"
 import { useNavigate } from "react-router-dom"
 import useSigned from "../hooks/useSigned"
 import BlogSkeleton from "../components/BlogCardSkeleton"
+import { useProfile } from "../hooks/useProfile"
 
 
 export default function Blogs(){
     const [blogs,setBlogs]=useState([])
+    const {modal,setModal}=useProfile();
     const [loading,setLoading]=useState(true);
     const {isSigned,isLoading,email}=useSigned();
   
@@ -33,7 +35,7 @@ export default function Blogs(){
                 Authorization:localStorage.getItem('token')
             }
         }).then(function(res){
-        console.log(res.data);
+
         setLoading(false)
         setBlogs(res.data.blogs)
         }).catch(function(err){
@@ -56,16 +58,18 @@ export default function Blogs(){
 
       },[])
        
-      console.log(isLoading);
+
       
       if(isLoading || loading){
         return <>
-        <Nav email={email}></Nav>
-        <div className="lg:w-1/2 max-w-full lg:m-auto lg:mt-24 px-4">
+        <Nav email={email} modal={modal} setModal={setModal}></Nav>
+        <div onClick={()=>{setModal(false)}} className={modal?"blur-sm  select-none":""}>
+        <div className="lg:w-1/2 max-w-full lg:m-auto lg:mt-24 px-4 mb-8">
         <BlogSkeleton></BlogSkeleton>
         <BlogSkeleton></BlogSkeleton>
         <BlogSkeleton></BlogSkeleton>
         <BlogSkeleton></BlogSkeleton>
+        </div>
         </div>
         </>
       }
@@ -76,12 +80,15 @@ export default function Blogs(){
      
 
   return <>
-  <Nav email={email}></Nav>
-<div className="lg:w-1/2 max-w-full  lg:m-auto lg:mt-24 px-4">
+
+  <Nav email={email} modal={modal} setModal={setModal}></Nav>
+  <div onClick={()=>{setModal(false)}} className={modal?"blur-sm select-none":""}>
+<div className="lg:w-1/2 max-w-full lg:m-auto lg:mt-24 px-4 pb-8 ">
 
 {blogs.map((blog:{id:string,title:string,content:string,publish_date:string,author:{name:string},likes:[{userId:string,has_liked:boolean}],liked:boolean})=>{
   return <BlogCard likes={ nooflikes(blog.likes)} id={blog.id} title={blog.title} content={blog.content} publish_date={blog.publish_date} author={blog.author}></BlogCard>
 })}
+</div>
 </div>
 </>
 

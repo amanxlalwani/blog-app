@@ -6,12 +6,15 @@ import BlogPageSkeleton from "../components/BlogPageSkeleton";
 import Nav from "../components/Nav";
 import LikesSection from "../components/LikesSection";
 import CommentSection from "../components/CommentSection";
+import { useProfile } from "../hooks/useProfile";
 
 
 export default function Blog(){
    const {id}=useParams();
+   const {modal,setModal}=useProfile();
+   
    const [loading,setLoading]=useState(true);
-   const [blog,setBlog]=useState({id:"",title:"",content:"",publish_date:"",author:{name:""},likes:[{
+   const [blog,setBlog]=useState({id:"",title:"",content:"",publish_date:"",author:{name:"",bio:""},likes:[{
     userId:"",
     has_liked:false
    }]})
@@ -49,7 +52,6 @@ export default function Blog(){
             Authorization:localStorage.getItem('token')
         }
     }).then(function(res){
-    console.log(res.data);
     setLoading(false)
     setBlog(res.data.blog)
     }).catch(function(){
@@ -74,7 +76,7 @@ export default function Blog(){
    
    if(isLoading || loading){
     return <>
-    <Nav email={email}></Nav>
+    <Nav email={email} modal={modal} setModal={setModal}></Nav>
     <BlogPageSkeleton></BlogPageSkeleton>
     </>
    }
@@ -85,9 +87,9 @@ export default function Blog(){
 
 
 
-    return <>
-    <Nav email={email}></Nav>
-   <div className="w-11/12 m-auto px-6 mt-14 lg:grid lg:gap-4 lg:grid-cols-4 break-words " >
+    return <> <Nav email={email} modal={modal} setModal={setModal}></Nav> <div className={modal?"blur-sm  select-none":""}>
+    
+   <div onClick={()=>{setModal(false)}} className="w-11/12 m-auto px-6 mt-14 pb-8 lg:grid lg:gap-4 lg:grid-cols-4 break-words " >
     <div className="lg:col-span-3 ">
  <div className="text-2xl lg:text-5xl  font-extrabold">{blog.title}</div>
      <div className="text-sm my-2 mb-4 text-gray-500">Posted On {(blog.publish_date).slice(0,10)}</div>
@@ -97,6 +99,7 @@ export default function Blog(){
  <div className="mt-10 lg:mt-0">
   <div>Author</div>
   <div className="text-xl font-extrabold  ">{blog.author.name}</div>
+  <div className="text-lg">{blog.author.bio}</div>
   <div className="mt-10">
     <LikesSection id={blog.id} isLiked={hasLiked(blog.likes)} likes={nooflikes(blog.likes)} ></LikesSection>
  </div>
@@ -108,5 +111,6 @@ export default function Blog(){
  </div>
  </div>
 
+    </div>
     </>
 }

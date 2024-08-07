@@ -12,14 +12,17 @@ import useSigned from './hooks/useSigned';
 import CreateBlog from './Pages/CreateBlog';
 import MyBlogs from './Pages/MyBlogs';
 import UpdateBlog from './Pages/UpdateBlog';
+import { useProfile } from './hooks/useProfile';
 
 
 
  function App() {
+   
+  
+
   return (
     <>
-    <div className='h-screen'>
-
+      <div className='h-screen'>
       <BrowserRouter>
     <Routes>
       <Route path='/' element={<Suspense fallback={<Loading></Loading>}><Default></Default></Suspense>} > </Route>

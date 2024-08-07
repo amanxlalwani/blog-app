@@ -14,7 +14,6 @@ export function ReplySection({parentComment,blogId,parentId,setReplyMode}:{paren
               Authorization:localStorage.getItem('token')
           }
       }).then(function(res){
-      console.log(res.data);
       setReplies(res.data.replies);
       setLoading(false);
       }).catch(function(err){
@@ -70,7 +69,7 @@ export function ReplySection({parentComment,blogId,parentId,setReplyMode}:{paren
         toast.error("Something went wrong")
       }
       else{
-        console.log(res.data);
+   
         setReload((reload)=>reload+1)
         setReply("");
         toast.info("Reply Added")

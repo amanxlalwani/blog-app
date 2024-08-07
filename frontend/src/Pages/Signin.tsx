@@ -27,10 +27,7 @@ export default function Signin(){
       <Loading></Loading>
       </>
     }
-    console.log(loading);
     
-
-
     if(isSigned){
       navigate('/blogs');
     }
@@ -39,7 +36,7 @@ export default function Signin(){
 
     return<>
 
-    <div className="grid grid-cols-1 lg:gap-4 lg:grid-cols-2 place-content-center content-stretch h-full">
+    <div className="grid grid-cols-1  lg:gap-4 lg:grid-cols-2 place-content-center content-stretch h-full">
      
      <div className="flex flex-col justify-center items-center">
         <div className="flex flex-col justify-center items-center">

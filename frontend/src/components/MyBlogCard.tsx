@@ -27,9 +27,7 @@ const navigate=useNavigate()
              navigate('/updateblog/'+blog.id)
             }} >Update</button>
             <button className="bg-red-500 p-2 rounded mt-4" type="button" onClick={async ()=>{
-              console.log(blog.id);
-             
-                
+        
              try{
              const res=await axios.delete("https://backend.aman-lalwani208.workers.dev/api/v1/blog/"+blog.id,{data:{},headers:{
                 Authorization:localStorage.getItem('token')

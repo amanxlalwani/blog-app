@@ -19,7 +19,6 @@ export default function CommentSection({blogId}:{blogId:string}){
             Authorization:localStorage.getItem('token')
         }
     }).then(function(res){
-    console.log(res.data);
     setLoading(false);
     setComments(res.data.comments)
     }).catch(function(err){
@@ -77,7 +76,7 @@ export default function CommentSection({blogId}:{blogId:string}){
         toast.error("Something went wrong")
       }
       else{
-        console.log(res.data);
+
         setReload((reload)=>reload+1)
         setComment("");
         toast.info("Comment Added")

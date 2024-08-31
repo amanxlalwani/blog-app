@@ -2,11 +2,14 @@ import { Hono } from "hono";
 import { getPrisma } from "./prismaFunction";
 import { verify } from "hono/jwt";
 import { blogSchema } from "@amanxlalwani/blog-app-common";
+
+
 const app=new Hono< 
 {
     Bindings:{
         DATABASE_URL:string,
-        JWT_SECRET:string
+        JWT_SECRET:string,
+        CLOUDINARY_SECRET:string
     },
     Variables : {
 		userid: string
@@ -208,7 +211,7 @@ app.delete('/:id',async (c)=>{
     return c.json({message:"Blog Deleted Successfully"});
 })
 
-app.get('/bulk',async (c)=>{
+app.get('/explore/bulk',async (c)=>{
    const prisma=getPrisma(c.env.DATABASE_URL);
    const blogs= await prisma.post.findMany({
     select:{
@@ -217,7 +220,7 @@ app.get('/bulk',async (c)=>{
         content:true,
         publish_date:true,
         author:{
-            select:{name:true}
+            select:{name:true }
         },
         likes:{
             select:{
@@ -230,6 +233,48 @@ app.get('/bulk',async (c)=>{
    
    return c.json({blogs});
 }) 
+
+
+app.get('/subscriptions/bulk',async (c)=>{
+    const prisma=getPrisma(c.env.DATABASE_URL);
+    const users= await prisma.subscribe.findMany({
+     select:{
+         user_id:true
+         }
+     })
+
+     const subscribed_to=users.map(ele=>{
+        return ele.user_id 
+     })
+
+     const blogs= await prisma.post.findMany({
+        where:{
+            authorId:{
+                in:subscribed_to 
+            }
+        },
+        select:{
+            id:true,
+            title:true,
+            content:true,
+            publish_date:true,
+            author:{
+                select:{name:true }
+            },
+            likes:{
+                select:{
+                    userId:true,
+                    has_liked:true
+                }
+            }
+        }
+       });
+
+
+    
+    return c.json({blogs});
+ }) 
+ 
 
 
 app.get('/myblogs',async (c) =>{
@@ -255,6 +300,7 @@ app.get('/myblogs',async (c) =>{
    })
    
 
+
    
    
 
@@ -262,7 +308,13 @@ app.get('/myblogs',async (c) =>{
 app.get('/:id', async (c)=>{
  const prisma=getPrisma(c.env.DATABASE_URL);
  const blogId=c.req.param("id");
- const blog=await prisma.post.findFirst({where:{id:blogId},select:{id:true,title:true,content:true,publish_date:true,author:{select:{name:true,bio:true}},
+ const blog=await prisma.post.findFirst({where:{id:blogId},select:{id:true,title:true,content:true,publish_date:true,author:{select:{id:true,name:true,bio:true,User:{
+    select:{
+        id:true,
+        user_id:true,
+        subscriber_id:true
+    }
+ }}},
     likes:{
         select:{
             userId:true,

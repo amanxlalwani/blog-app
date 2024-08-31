@@ -7,6 +7,9 @@ import Nav from "../components/Nav";
 import LikesSection from "../components/LikesSection";
 import CommentSection from "../components/CommentSection";
 import { useProfile } from "../hooks/useProfile";
+import Button from "../components/Button";
+import { toast } from "react-toastify";
+import SubscribeButton from "../components/SubscribeButton";
 
 
 export default function Blog(){
@@ -14,13 +17,15 @@ export default function Blog(){
    const {modal,setModal}=useProfile();
    
    const [loading,setLoading]=useState(true);
-   const [blog,setBlog]=useState({id:"",title:"",content:"",publish_date:"",author:{name:"",bio:""},likes:[{
+   const [blog,setBlog]=useState({id:"",title:"",content:"",publish_date:"",author:{id:"",name:"",bio:"",User:[{id:"",user_id:"",subscriber_id:""}]},likes:[{
     userId:"",
     has_liked:false
    }]})
    const navigate=useNavigate() 
    const {isSigned,isLoading,email,userId}=useSigned();
-
+   const [numberofSubscribers,setNumberOfSubscribers]=useState(0);
+   const [isSubscribed,setSubscribed]=useState(false)
+   const [subscribeId,setSubscribeId]=useState<string | null>(null)
        
    function nooflikes(likes:{userId:string,has_liked:boolean}[]):number{
     var c=0
@@ -46,6 +51,23 @@ export default function Blog(){
     return val
    }
 
+
+   function hasSubscribed(User:{id:string,user_id:string,subscriber_id:string}[]):boolean{
+      var val=false
+      User.forEach(ele=>{
+         var c=0;
+         console.log("User"+c++);
+         
+         console.log(ele);
+         
+      if(ele.subscriber_id == userId){
+       val=true
+       setSubscribeId(ele.id)
+      }
+   });
+   return val
+   }
+
    useEffect(()=>{
     axios.get("https://backend.aman-lalwani208.workers.dev/api/v1/blog/"+id,{
         headers:{
@@ -53,8 +75,9 @@ export default function Blog(){
         }
     }).then(function(res){
     setLoading(false)
-    setBlog(res.data.blog)
-    }).catch(function(){
+    setBlog(res.data.blog)    
+    }
+   ).catch(function(){
        navigate("/signup")
     })
     
@@ -65,6 +88,7 @@ export default function Blog(){
         }
     }).then(function(res){
      setBlog(res.data.blog)
+     
     }).catch(function(){
       navigate("/signup")
       
@@ -74,6 +98,12 @@ export default function Blog(){
 
    },[id])
    
+   useEffect(()=>{
+      setNumberOfSubscribers(blog.author.User.length)
+      setSubscribed(hasSubscribed(blog.author.User))
+   },[blog])
+
+
    if(isLoading || loading){
     return <>
     <Nav email={email} modal={modal} setModal={setModal}></Nav>
@@ -98,7 +128,59 @@ export default function Blog(){
 
  <div className="mt-10 lg:mt-0">
   <div>Author</div>
-  <div className="text-xl font-extrabold  ">{blog.author.name}</div>
+  <div className="flex items-baseline gap-4 ">
+  <div className="text-xl font-extrabold">{blog.author.name}
+  <div className="text-sm font-light text-slate-800">{numberofSubscribers}  Subscribers</div> 
+  </div>
+  <div >{isSubscribed?<><SubscribeButton  title="Unsubscribe" onClick={async ()=>{
+    try{
+    const res:{data:{status:number}}=await axios.post("https://backend.aman-lalwani208.workers.dev/api/v1/user/unsubscribe",{subscribeId:subscribeId,subscriber_id:userId,user_id:blog.author.id},{
+   headers:{
+       Authorization:localStorage.getItem('token')
+   }})  
+   if(res.data.status==200){
+      setSubscribeId(null)
+      setSubscribed(false)
+      setNumberOfSubscribers((numberofSubscribers)=>numberofSubscribers-1)
+      toast.info("Subscribtion removed")
+   }
+   else{
+      toast.error("Something went wrong!")
+      console.error("Database Error");
+      
+   }
+}
+   catch{
+      toast.error("Something went wrong!")
+      console.error("Axios error");
+   }
+}} /></>:<><SubscribeButton  title="Subscribe" onClick={async ()=>{
+   try{
+   const res:{data:{status:number ,subscribeId:string,message:string} }=await axios.post("https://backend.aman-lalwani208.workers.dev/api/v1/user/subscribe",{subscriber_id:userId,user_id:blog.author.id},{
+      headers:{
+          Authorization:localStorage.getItem('token')
+      }}) 
+      if(res.data.status==200){ 
+      console.log(res);
+      setSubscribeId(res.data.subscribeId)
+      setSubscribed(true)
+      setNumberOfSubscribers((numberofSubscribers)=>numberofSubscribers+1)
+      toast.info("Subscribtion added")
+      }
+      else{
+         toast.error("Something went wrong!")
+         console.error("Database Error");
+         
+      }
+   }
+      catch{
+       toast.error("Something went wrong!")
+       console.error("Axios error");
+         
+      }
+  }} /></>}</div>
+  </div>
+  
   <div className="text-lg">{blog.author.bio}</div>
   <div className="mt-10">
     <LikesSection id={blog.id} isLiked={hasLiked(blog.likes)} likes={nooflikes(blog.likes)} ></LikesSection>

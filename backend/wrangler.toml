@@ -1,9 +1,12 @@
+node_compat=true
 name = "backend"
 compatibility_date = "2024-07-12"
 
 [vars]
-DATABASE_URL="prisma://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiMmViOTk5ZjgtNmIzOC00ODhhLTkwMTYtNzY3ZWJmMmE2Y2MwIiwidGVuYW50X2lkIjoiM2E2MzE2NjI1YTYwYzkxZjVkNDQ0MTU1NWZjNzQ4ODRmZmE3M2I4Y2YyZjAzOTIwNmUxYjZiYmZlNjAwMzEwNCIsImludGVybmFsX3NlY3JldCI6ImI5ZjMwNmQwLTgyYTItNDI2My05N2QwLWFlYzdmOTNiMGVjYiJ9.cUtxu8L8QcQiD9N6rdV3gKlqB-fIvXxIOX21gMNRpPI"
-JWT_SECRET="mysecret"
+DATABASE_URL="YOUR_PRISMA_ACCELERATE_URL"
+JWT_SECRET="YOUR_JWT_SECRET"
+
+
 
 # [[kv_namespaces]]
 # binding = "MY_KV_NAMESPACE"

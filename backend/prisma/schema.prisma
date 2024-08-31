@@ -24,6 +24,8 @@ model User {
   posts    Post[]
   likes    Like[]
   comments Comment[]
+  User     Subscribe[] @relation(name:"user")   
+  Subscribers Subscribe[] @relation(name: "subscriber")
 }
 
 model Post {
@@ -46,6 +48,14 @@ model Like {
   user       User @relation(fields: [userId],references: [id])
   userId      String 
   has_liked   Boolean
+ }
+
+ model Subscribe{
+  id      String @id @default(uuid())
+  user    User  @relation(name:"user",fields: [user_id],references: [id]) 
+  user_id String 
+  subscriber User @relation(name:"subscriber",fields: [subscriber_id],references: [id])
+  subscriber_id String
  }
 
 

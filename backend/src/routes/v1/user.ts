@@ -29,6 +29,57 @@ app.get('/me',async (c)=>{
     }
 })
 
+
+app.post('/subscribe', async (c)=>{
+    const prisma=getPrisma(c.env.DATABASE_URL);
+    const data=await c.req.json();
+    try{
+    const res=await prisma.subscribe.create({
+        data:{
+            subscriber_id:data.subscriber_id,
+            user_id:data.user_id
+        }
+    })
+
+    return c.json({
+        status:200,
+        message:"Subscribed",
+        subscribeId:res.id 
+    })}
+    catch{
+        return c.json({
+            status:400
+        })
+    }
+
+})
+
+
+app.post('/unsubscribe', async (c)=>{
+    const prisma=getPrisma(c.env.DATABASE_URL);
+    const data=await c.req.json();
+    try{
+    const res=await prisma.subscribe.delete({
+        where:{
+            id:data.subscribeId,
+            subscriber_id:data.subscriber_id,
+            user_id:data.user_id
+        }
+    })
+   
+    return c.json({
+        status:200,
+        message:"Unsubscribed" 
+    })}
+    catch{
+        return c.json({
+            status:400
+        })
+    }
+
+})
+
+
 app.post('/signin',async (c)=>{
    const prisma=getPrisma(c.env.DATABASE_URL);
    const data=await c.req.json();

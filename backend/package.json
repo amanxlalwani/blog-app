@@ -9,6 +9,7 @@
     "@prisma/adapter-pg": "^5.16.2",
     "@prisma/client": "^5.16.2",
     "@prisma/extension-accelerate": "^1.1.0",
+    "cloudinary": "^2.4.0",
     "hono": "^4.4.13",
     "pg": "^8.12.0",
     "react-toastify": "^10.0.5"

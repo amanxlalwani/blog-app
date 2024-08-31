@@ -7,7 +7,7 @@ import Nav from "../components/Nav";
 import LikesSection from "../components/LikesSection";
 import CommentSection from "../components/CommentSection";
 import { useProfile } from "../hooks/useProfile";
-import Button from "../components/Button";
+
 import { toast } from "react-toastify";
 import SubscribeButton from "../components/SubscribeButton";
 

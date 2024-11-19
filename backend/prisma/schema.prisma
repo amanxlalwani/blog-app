@@ -1,0 +1,73 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+ 
+}
+
+
+model User {
+  id       String   @id @default(uuid())
+  email    String   @unique
+  name     String   @default("Unknown")
+  password String
+  bio      String?
+  posts    Post[]
+  likes    Like[]
+  comments Comment[]
+  User     Subscribe[] @relation(name:"user")   
+  Subscribers Subscribe[] @relation(name: "subscriber")
+}
+
+model Post {
+  id        String   @id @default(uuid())
+  title     String
+  content   String
+  published Boolean  @default(false)
+  author    User     @relation(fields: [authorId], references: [id])
+  publish_date DateTime @default(now())
+  authorId  String
+  likes     Like[] 
+  comments  Comment[]
+}
+
+
+model Like {
+  id          String @id @default(uuid())
+  post        Post @relation(fields: [postId],references: [id]) 
+  postId      String
+  user       User @relation(fields: [userId],references: [id])
+  userId      String 
+  has_liked   Boolean
+ }
+
+ model Subscribe{
+  id      String @id @default(uuid())
+  user    User  @relation(name:"user",fields: [user_id],references: [id]) 
+  user_id String 
+  subscriber User @relation(name:"subscriber",fields: [subscriber_id],references: [id])
+  subscriber_id String
+ }
+
+
+ model Comment{
+  id          String @id @default(uuid())
+  comment     String
+  post        Post @relation(fields: [postId],references: [id])
+  postId      String
+  user        User @relation(fields: [userId] , references: [id])
+  userId      String
+  replies     Comment[] @relation(name: "CommentToComment")
+  parentId    String?
+  parentComment Comment?  @relation(name:"CommentToComment", fields: [parentId],references: [id])
+  isChildComment Boolean       
+ }

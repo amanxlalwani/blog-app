@@ -54,8 +54,8 @@ export default function Signin() {
             <InputBox
               required={true}
               name="Username"
-              placeholder="aman@example.com"
-              type="email"
+              placeholder="example_username"
+              type="text"
               onChange={(e) => setUser({ ...user, email: e.target.value })}
             ></InputBox>
             <InputBox

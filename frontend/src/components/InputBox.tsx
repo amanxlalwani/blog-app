@@ -52,7 +52,7 @@ export default function InputBox({
           >
             {isShow ? (
               <svg
-                className="w-4  lg:w-6 lg:h-6"
+                className="h-4  lg:w-6 lg:h-6"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 640 512"
               >

@@ -80,7 +80,7 @@ export default function Signup() {
               type="text"
               onChange={(e) => setUser({ ...user, name: e.target.value })}
             ></InputBox>
-            <InputBox
+            <InputBox 
               required={true}
               name="Username"
               placeholder="example_username"

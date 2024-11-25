@@ -171,18 +171,62 @@ export default function Blog() {
                   {numberofSubscribers} Subscribers
                 </div>
               </div>
-              <div>
-                {isSubscribed ? (
-                  <>
-                    <SubscribeButton
-                      title="Unsubscribe"
-                      onClick={async () => {
-                        try {
-                          const res: { data: { status: number } } =
-                            await axios.post(
-                              "https://backend.aman-lalwani208.workers.dev/api/v1/user/unsubscribe",
+              {userId == blog.author.id ? null : (
+                <div>
+                  {isSubscribed ? (
+                    <>
+                      <SubscribeButton
+                        title="Unsubscribe"
+                        onClick={async () => {
+                          try {
+                            const res: { data: { status: number } } =
+                              await axios.post(
+                                "https://backend.aman-lalwani208.workers.dev/api/v1/user/unsubscribe",
+                                {
+                                  subscribeId: subscribeId,
+                                  subscriber_id: userId,
+                                  user_id: blog.author.id,
+                                },
+                                {
+                                  headers: {
+                                    Authorization:
+                                      localStorage.getItem("token"),
+                                  },
+                                }
+                              );
+                            if (res.data.status == 200) {
+                              setSubscribeId(null);
+                              setSubscribed(false);
+                              setNumberOfSubscribers(
+                                (numberofSubscribers) => numberofSubscribers - 1
+                              );
+                              toast.info("Subscribtion removed");
+                            } else {
+                              toast.error("Something went wrong!");
+                              console.error("Database Error");
+                            }
+                          } catch {
+                            toast.error("Something went wrong!");
+                            console.error("Axios error");
+                          }
+                        }}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <SubscribeButton
+                        title="Subscribe"
+                        onClick={async () => {
+                          try {
+                            const res: {
+                              data: {
+                                status: number;
+                                subscribeId: string;
+                                message: string;
+                              };
+                            } = await axios.post(
+                              "https://backend.aman-lalwani208.workers.dev/api/v1/user/subscribe",
                               {
-                                subscribeId: subscribeId,
                                 subscriber_id: userId,
                                 user_id: blog.author.id,
                               },
@@ -192,66 +236,28 @@ export default function Blog() {
                                 },
                               }
                             );
-                          if (res.data.status == 200) {
-                            setSubscribeId(null);
-                            setSubscribed(false);
-                            setNumberOfSubscribers(
-                              (numberofSubscribers) => numberofSubscribers - 1
-                            );
-                            toast.info("Subscribtion removed");
-                          } else {
-                            toast.error("Something went wrong!");
-                            console.error("Database Error");
-                          }
-                        } catch {
-                          toast.error("Something went wrong!");
-                          console.error("Axios error");
-                        }
-                      }}
-                    />
-                  </>
-                ) : (
-                  <>
-                    <SubscribeButton
-                      title="Subscribe"
-                      onClick={async () => {
-                        try {
-                          const res: {
-                            data: {
-                              status: number;
-                              subscribeId: string;
-                              message: string;
-                            };
-                          } = await axios.post(
-                            "https://backend.aman-lalwani208.workers.dev/api/v1/user/subscribe",
-                            { subscriber_id: userId, user_id: blog.author.id },
-                            {
-                              headers: {
-                                Authorization: localStorage.getItem("token"),
-                              },
+                            if (res.data.status == 200) {
+                              console.log(res);
+                              setSubscribeId(res.data.subscribeId);
+                              setSubscribed(true);
+                              setNumberOfSubscribers(
+                                (numberofSubscribers) => numberofSubscribers + 1
+                              );
+                              toast.info("Subscribtion added");
+                            } else {
+                              toast.error("Something went wrong!");
+                              console.error("Database Error");
                             }
-                          );
-                          if (res.data.status == 200) {
-                            console.log(res);
-                            setSubscribeId(res.data.subscribeId);
-                            setSubscribed(true);
-                            setNumberOfSubscribers(
-                              (numberofSubscribers) => numberofSubscribers + 1
-                            );
-                            toast.info("Subscribtion added");
-                          } else {
+                          } catch {
                             toast.error("Something went wrong!");
-                            console.error("Database Error");
+                            console.error("Axios error");
                           }
-                        } catch {
-                          toast.error("Something went wrong!");
-                          console.error("Axios error");
-                        }
-                      }}
-                    />
-                  </>
-                )}
-              </div>
+                        }}
+                      />
+                    </>
+                  )}
+                </div>
+              )}
             </div>
 
             <div className="text-lg">{blog.author.bio}</div>

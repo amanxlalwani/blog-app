@@ -2,17 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 .multiLineLabel {
-    display: inline-block;
-    box-sizing: border-box;
-    white-space: pre-line;
-    word-wrap: break-word;
-  }
-  
-  .multiLineLabel .textMaxLine {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    overflow: hidden;
-  }
+  display: inline-block;
+  box-sizing: border-box;
+  white-space: pre-line;
+  word-wrap: break-word;
+}
 
+.multiLineLabel .textMaxLine {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}

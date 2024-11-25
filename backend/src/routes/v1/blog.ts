@@ -213,7 +213,17 @@ app.delete("/:id", async (c) => {
 
 app.get("/explore/bulk", async (c) => {
   const prisma = getPrisma(c.env.DATABASE_URL);
+
+  const page = parseInt(c.req.query("page") || "1");
+  const limit = parseInt(c.req.query("limit") || "5");
+  const skip = (page - 1) * limit;
+
   const blogs = await prisma.post.findMany({
+    skip,
+    take: limit,
+    orderBy: {
+      publish_date: "desc",
+    },
     select: {
       id: true,
       title: true,
@@ -231,12 +241,18 @@ app.get("/explore/bulk", async (c) => {
     },
   });
 
-  return c.json({ blogs });
+  const blogsCount = await prisma.post.count();
+  const totalPages = Math.ceil(blogsCount / limit);
+
+  return c.json({ blogs, totalPages, currentPage: page });
 });
 
 app.get("/subscriptions/bulk", async (c) => {
   const prisma = getPrisma(c.env.DATABASE_URL);
   const id = c.get("userid");
+  const page = parseInt(c.req.query("page") || "1");
+  const limit = parseInt(c.req.query("limit") || "5");
+  const skip = (page - 1) * limit;
   const users = await prisma.subscribe.findMany({
     where: {
       subscriber_id: id,
@@ -251,6 +267,33 @@ app.get("/subscriptions/bulk", async (c) => {
   });
 
   const blogs = await prisma.post.findMany({
+    skip,
+    take: limit,
+    orderBy: {
+      publish_date: "desc",
+    },
+    where: {
+      authorId: {
+        in: subscribed_to,
+      },
+    },
+    select: {
+      id: true,
+      title: true,
+      content: true,
+      publish_date: true,
+      author: {
+        select: { name: true },
+      },
+      likes: {
+        select: {
+          userId: true,
+          has_liked: true,
+        },
+      },
+    },
+  });
+  const totalBlogs = await prisma.post.findMany({
     where: {
       authorId: {
         in: subscribed_to,
@@ -273,7 +316,8 @@ app.get("/subscriptions/bulk", async (c) => {
     },
   });
 
-  return c.json({ blogs });
+  const totalPages = Math.ceil(totalBlogs.length / limit);
+  return c.json({ blogs, totalPages, currentPage: page });
 });
 
 app.get("/myblogs", async (c) => {

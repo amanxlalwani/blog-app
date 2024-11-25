@@ -6,12 +6,32 @@ function dateExtract(publish_date: string) {
   return publish_date.slice(0, 10);
 }
 
-export default function BlogCard(blog: {
+export default function MyBlogCard({
+  id,
+  title,
+  content,
+  publish_date,
+  author,
+  setBlogs,
+}: {
   id: string;
   title: string;
   content: string;
   publish_date: string;
   author: { name: string };
+  setBlogs: React.Dispatch<
+    React.SetStateAction<
+      {
+        id: string;
+        title: string;
+        content: string;
+        publish_date: string;
+        author: {
+          name: string;
+        };
+      }[]
+    >
+  >;
 }) {
   const navigate = useNavigate();
 
@@ -20,20 +40,18 @@ export default function BlogCard(blog: {
       <hr className="border mt-10 border-gray-200" />
       <div className="mt-12 w-full cursor-pointer break-words  ">
         <div className="text-base">
-          {blog.author.name} ·{" "}
-          <span className="text-gray-500">
-            {dateExtract(blog.publish_date)}
-          </span>{" "}
+          {author.name} ·{" "}
+          <span className="text-gray-500">{dateExtract(publish_date)}</span>{" "}
         </div>
-        <div className="text-2xl font-bold ">{blog.title}</div>
+        <div className="text-2xl font-bold ">{title}</div>
         <div className="multiLineLabel w-full">
-          <div className=" max-w-full textMaxLine  ">{blog.content}</div>
+          <div className=" max-w-full textMaxLine  ">{content}</div>
           <div className="flex gap-4">
             <button
               className="bg-blue-500 p-2 rounded mt-4"
               type="button"
               onClick={() => {
-                navigate("/updateblog/" + blog.id);
+                navigate("/updateblog/" + id);
               }}
             >
               Update
@@ -45,7 +63,7 @@ export default function BlogCard(blog: {
                 try {
                   const res = await axios.delete(
                     "https://backend.aman-lalwani208.workers.dev/api/v1/blog/" +
-                      blog.id,
+                      id,
                     {
                       data: {},
                       headers: {
@@ -59,6 +77,7 @@ export default function BlogCard(blog: {
                   if (res.status == 404) {
                     toast.error(res.data.message);
                   } else {
+                    setBlogs((blogs) => blogs.filter((blog) => blog.id !== id));
                     toast.info(res.data.message);
                   }
                 } catch (err) {

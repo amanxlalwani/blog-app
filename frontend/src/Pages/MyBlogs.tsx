@@ -10,7 +10,15 @@ import BlogSkeleton from "../components/BlogCardSkeleton";
 import { useProfile } from "../hooks/useProfile";
 
 export default function MyBlogs() {
-  const [blogs, setBlogs] = useState([]);
+  const [blogs, setBlogs] = useState<
+    {
+      id: string;
+      title: string;
+      content: string;
+      publish_date: string;
+      author: { name: string };
+    }[]
+  >([]);
   const [loading, setLoading] = useState(true);
   const { isSigned, isLoading, email } = useSigned();
   const { modal, setModal } = useProfile();
@@ -141,6 +149,7 @@ export default function MyBlogs() {
                   content={blog.content}
                   publish_date={blog.publish_date}
                   author={blog.author}
+                  setBlogs={setBlogs}
                 ></MyBlogCard>
               );
             }

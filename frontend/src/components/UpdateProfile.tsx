@@ -118,7 +118,6 @@ export default function UpdateProfile({
                   setProfile(profilesection);
                 } else {
                   toast.error(res.data["message"]);
-                  console.log(1111111);
                 }
               } catch (err) {
                 console.log(err);

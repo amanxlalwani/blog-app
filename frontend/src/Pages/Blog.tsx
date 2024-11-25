@@ -52,7 +52,6 @@ export default function Blog() {
   }
 
   function hasLiked(likes: { userId: string; has_liked: boolean }[]): boolean {
-    console.log(likes);
     var val = false;
     likes.forEach((element) => {
       if (element.userId == userId) {
@@ -70,9 +69,6 @@ export default function Blog() {
     var val = false;
     User.forEach((ele) => {
       var c = 0;
-      console.log("User" + c++);
-
-      console.log(ele);
 
       if (ele.subscriber_id == userId) {
         val = true;
@@ -237,7 +233,6 @@ export default function Blog() {
                               }
                             );
                             if (res.data.status == 200) {
-                              console.log(res);
                               setSubscribeId(res.data.subscribeId);
                               setSubscribed(true);
                               setNumberOfSubscribers(

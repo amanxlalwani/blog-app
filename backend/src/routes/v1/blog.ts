@@ -195,7 +195,8 @@ app.delete("/:id", async (c) => {
   const userId = c.get("userid");
 
   const prisma = getPrisma(c.env.DATABASE_URL);
-
+  await prisma.like.deleteMany({ where: { postId: blogId } });
+  await prisma.comment.deleteMany({ where: { postId: blogId } });
   const result = await prisma.post.delete({
     where: {
       id: blogId,
@@ -344,7 +345,7 @@ app.get("/myblogs", async (c) => {
 
 app.get("/search", async (c) => {
   const filter = c.req.query("filter") || "";
-  console.log(filter);
+
   if (!(filter?.length > 0)) {
     return c.json({ blogs: [] });
   }

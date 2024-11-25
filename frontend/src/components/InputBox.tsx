@@ -21,8 +21,6 @@ export default function InputBox({
     const [isShow, setShow] = useState(false);
 
     function toggleShow() {
-      console.log(isShow);
-
       setShow((isShow) => !isShow);
     }
 

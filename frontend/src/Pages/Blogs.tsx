@@ -9,7 +9,6 @@ import useSigned from "../hooks/useSigned";
 import BlogSkeleton from "../components/BlogCardSkeleton";
 import { useProfile } from "../hooks/useProfile";
 
-
 export default function Blogs() {
   const [searchParams] = useSearchParams();
   const [blogs, setBlogs] = useState([]);
@@ -35,7 +34,6 @@ export default function Blogs() {
   }
 
   useEffect(() => {
-    console.log(location);
     axios
       .get(
         `https://backend.aman-lalwani208.workers.dev/api/v1/blog/${tab}/bulk?page=${

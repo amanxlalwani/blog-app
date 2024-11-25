@@ -8,7 +8,7 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import useSigned from "../hooks/useSigned";
 import BlogSkeleton from "../components/BlogCardSkeleton";
 import { useProfile } from "../hooks/useProfile";
-import { log } from "console";
+
 
 export default function Blogs() {
   const [searchParams] = useSearchParams();

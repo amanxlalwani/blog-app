@@ -68,8 +68,6 @@ export default function Blog() {
   ): boolean {
     var val = false;
     User.forEach((ele) => {
-      var c = 0;
-
       if (ele.subscriber_id == userId) {
         val = true;
         setSubscribeId(ele.id);
